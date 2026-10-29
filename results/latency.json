@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-10-29T15:02:21+00:00",
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.2",
+    "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+    "cpus": 18
+  },
+  "server": "local uvicorn, 1 worker, decision log on",
+  "http": {
+    "concurrent": {
+      "requests": 3000,
+      "concurrency": 32,
+      "errors": 0,
+      "wall_s": 35.089,
+      "rps": 85.5,
+      "latency_ms": {
+        "p50": 209.51,
+        "p95": 1186.17,
+        "p99": 1973.82,
+        "mean": 373.11,
+        "max": 3292.94
+      },
+      "server_ms": {
+        "p50": 11.58,
+        "p95": 18.57,
+        "p99": 27.25,
+        "mean": 12.14,
+        "max": 108.95
+      }
+    },
+    "sequential": {
+      "requests": 500,
+      "latency_ms": {
+        "p50": 6.38,
+        "p95": 8.1,
+        "p99": 10.11,
+        "mean": 6.48,
+        "max": 27.67
+      },
+      "server_ms": {
+        "p50": 1.72,
+        "p95": 2.28,
+        "p99": 2.98,
+        "mean": 1.8,
+        "max": 22.38
+      }
+    }
+  },
+  "engine_batch": {
+    "rows": 31500,
+    "repeats": 7,
+    "median_ms": 6.38,
+    "min_ms": 5.38
+  },
+  "target": {
+    "p95_single_ms": 50.0,
+    "sequential_p95_ms": 8.1,
+    "met": true
+  }
+}

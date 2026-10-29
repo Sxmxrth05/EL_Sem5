@@ -1,0 +1,162 @@
+# Default configuration, version 1.
+# Every number that changes a result lives here (team rule A7).
+# All values are v1 placeholders from the team guide, not facts about real UPI.
+# Tier codes and other keys that look like numbers are quoted on purpose.
+
+version: 1
+
+sizes:
+  n_users: 1000
+  payments_per_user: 30
+  attacks_per_type: 300
+
+seeds:
+  demo: 7                        # parity target seed
+  tune: [1, 2, 3, 4, 5]          # seeds used for tuning / main results
+  report: [101, 102, 103, 104, 105]  # held-out seeds, never tuned on
+  parity: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# ---------------------------------------------------------------- Person 1
+generator:
+  evasive: false
+  legit:
+    median_center: 400           # lognormal location = ln(400)
+    median_sigma: 0.8
+    median_min: 60
+    median_max: 5000
+    big_payment_prob: 0.03
+    big_ratio_low: 10
+    big_ratio_high: 150
+    ratio_sigma: 0.7             # ratio = exp(0.7 * N(0,1))
+    new_device: 0.02
+    network: {home: 0.45, mobile: 0.50, public: 0.05}
+    new_payee: 0.12
+    velocity: 0.03
+    far_location: 0.03
+    true_sim_change: 0.005
+    true_remote: 0.005
+    fri: [0.975, 0.020, 0.004, 0.001]
+  coverage:
+    sim_change: 0.90             # P(true SIM change is observed)
+    remote: 0.85                 # P(true remote-access app is observed)
+  min_attack_ratio: 1.2
+  attacks:
+    simswap:
+      new_device: 0.95
+      network: {home: 0.10, mobile: 0.60, public: 0.30}
+      new_payee: 0.95
+      ratio_center: 25           # mu = ln(25)
+      ratio_sigma: 0.6
+      velocity: 0.5
+      true_sim_change: 0.9
+      true_remote: 0.05
+      far_location: 0.5
+      fri: [0.45, 0.20, 0.20, 0.15]
+    screenshare:
+      new_device: 0.03
+      network: {home: 0.50, mobile: 0.50, public: 0.0}
+      new_payee: 0.90
+      ratio_center: 15
+      ratio_sigma: 0.7
+      velocity: 0.2
+      true_sim_change: 0.0
+      true_remote: 0.9
+      far_location: 0.05
+      fri: [0.45, 0.20, 0.20, 0.15]
+    collect:
+      new_device: 0.02
+      network: {home: 0.50, mobile: 0.48, public: 0.02}
+      new_payee: 0.90
+      ratio_center: 6
+      ratio_sigma: 0.6
+      velocity: 0.1
+      true_sim_change: 0.0
+      true_remote: 0.05
+      far_location: 0.05
+      fri: [0.45, 0.20, 0.20, 0.15]
+    replay:
+      new_device: 0.80
+      network: {home: 0.20, mobile: 0.30, public: 0.50}
+      new_payee: 0.70
+      ratio_center: 8
+      ratio_sigma: 0.6
+      velocity: 0.7
+      true_sim_change: 0.1
+      true_remote: 0.05
+      far_location: 0.4
+      fri: [0.90, 0.05, 0.03, 0.02]
+    stolen:
+      new_device: 0.0
+      network: {home: 0.10, mobile: 0.70, public: 0.20}
+      new_payee: 0.90
+      ratio_center: 15
+      ratio_sigma: 0.7
+      velocity: 0.7
+      true_sim_change: 0.0
+      true_remote: 0.0
+      far_location: 0.6
+      fri: [0.45, 0.20, 0.20, 0.15]
+  evasive_params:
+    normal_amount_prob: 0.60     # ratio = 1 + U(0,1) with this probability
+    fri_zero_prob: 0.85
+
+# ---------------------------------------------------------------- Person 2
+policy:
+  score_cap: 100
+  amount_bands:
+    mid_low: 2                   # 2 <= ratio <= 10  -> amt_2x_10x
+    mid_high: 10                 # ratio > 10        -> amt_over_10x
+  weights:
+    new_device: 30
+    net_mobile: 5
+    net_public: 15
+    new_payee: 15
+    amt_2x_10x: 10
+    amt_over_10x: 25
+    velocity: 10
+    sim_change: 25
+    remote: 30
+    far_location: 15
+    fri_1: 10
+    fri_2: 20
+    fri_3: 35
+  thresholds: [20, 50, 70]       # base thresholds; effective = base + shift
+  shift: 0
+
+# ---------------------------------------------------------------- Person 3
+costs:
+  friction: {"0": 0, "W": 0.5, "1": 1, "2": 5, "3": 10}
+  abandon:  {"0": 0, "W": 0.01, "1": 0.02, "2": 0.25, "3": 0.60}
+  p_stop:
+    "0": {simswap: 0.0,  screenshare: 0.0,  collect: 0.0,  replay: 0.0,  stolen: 0.0}
+    "W": {simswap: 0.05, screenshare: 0.15, collect: 0.15, replay: 0.02, stolen: 0.02}
+    "1": {simswap: 0.15, screenshare: 0.10, collect: 0.10, replay: 0.50, stolen: 0.35}
+    "2": {simswap: 0.55, screenshare: 0.50, collect: 0.50, replay: 0.80, stolen: 0.60}
+    "3": {simswap: 0.90, screenshare: 0.85, collect: 0.85, replay: 0.95, stolen: 0.85}
+
+baselines:
+  amount_rule_threshold: 10000   # tier 1 if amount > this
+  fri_block_level: 3             # fri >= this -> tier 3
+  fri_warn_level: 1              # fri >= this (and below block) -> W
+
+experiment:
+  sweep_shifts: {start: -30, stop: 60, step: 3}
+  sensitivity_factors: [0.5, 1.0, 2.0]
+
+# ---------------------------------------------------------------- Person 4
+service:
+  decision_log_path: service/decisions.jsonl
+  max_batch: 1000
+  max_decisions_limit: 1000
+  max_amount: 10000000           # input sanity limit (rupees)
+  simulate_limits:
+    max_users: 300
+    max_payments_per_user: 30
+    max_attacks_per_type: 100
+  strictness_range: [-30, 30]    # slider range; shift d = -strictness
+  tier_names:
+    "0": PIN only
+    "W": Warning then PIN
+    "1": Step-up (biometric or OTP)
+    "2": Hold 30 minutes and confirm
+    "3": Block and call back
