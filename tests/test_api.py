@@ -1,4 +1,5 @@
 import json
+import re
 
 import pytest
 from fastapi.testclient import TestClient
@@ -215,6 +216,9 @@ def test_web_app_is_served(client):
     r = client.get("/", follow_redirects=False)
     assert r.status_code in (302, 307) and r.headers["location"] == "/ui/"
     page = client.get("/ui/")
-    assert page.status_code == 200 and "decision console" in page.text
-    assert client.get("/ui/app.js").status_code == 200
-    assert client.get("/ui/styles.css").status_code == 200
+    assert page.status_code == 200 and "Step-up simulation engine" in page.text
+    # The built React app (frontend/ -> service/web/) must reference assets that are served.
+    assets = re.findall(r'(?:src|href)="(/ui/assets/[^"]+)"', page.text)
+    assert any(a.endswith(".js") for a in assets) and any(a.endswith(".css") for a in assets)
+    for a in assets:
+        assert client.get(a).status_code == 200, a

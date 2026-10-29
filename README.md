@@ -72,6 +72,23 @@ curl -s localhost:8000/score -H "Content-Type: application/json" -d '{"amount":4
 
 Environment variables: `UPI_CONFIG` (config path) and `UPI_DECISION_LOG` (log path).
 
+## Web app
+
+The browser UI in `frontend/` is React + TypeScript (Vite) with shadcn/ui components,
+shadcn charts (Recharts) and Motion animations. Its production build lives in `service/web/`
+and is committed, so running the service needs no Node. Only people changing the UI need it:
+
+```bash
+cd frontend
+npm ci
+npm run dev      # live-reloading UI at http://localhost:5173/ui/ (start uvicorn on :8000 first)
+npm run build    # rebuild service/web, then commit frontend/ and service/web/ together
+```
+
+Tabs: **Simulation** (trade-off curve, strictness sweep, policy comparison), **Score a payment**
+(itemised decision and baseline comparison), **Decision log**. A link such as
+`/ui/#SIM-swap%20fraud` opens with that scenario already scored.
+
 ## Tools
 
 * `python -m tools.parity` prints the golden scores, the Python aggregates over 10 seeds, a

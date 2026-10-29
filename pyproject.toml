@@ -33,7 +33,7 @@ ml = [
 include = ["common*", "sim*", "policy*", "baselines*", "eval*", "service*", "tools*"]
 
 [tool.setuptools.package-data]
-service = ["web/*"]
+service = ["web/*", "web/assets/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -43,7 +43,7 @@ filterwarnings = ["ignore:Using `httpx` with `starlette.testclient`"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-extend-exclude = ["reference", "results"]
+extend-exclude = ["reference", "results", "frontend"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]

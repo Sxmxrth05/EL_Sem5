@@ -3,7 +3,7 @@ PY ?= python
 CONFIG ?= configs/default.yaml
 PORT ?= 8000
 
-.PHONY: install lint test parity experiment serve bench docker-build docker-run all
+.PHONY: install lint test parity experiment serve bench docker-build docker-run ui ui-dev all
 
 install:
 	$(PY) -m pip install -e ".[dev]"
@@ -39,3 +39,11 @@ docker-run:
 	docker run --rm -p $(PORT):8000 upi-stepup
 
 all: test experiment serve
+
+# Web app (React + shadcn/ui + Motion). Builds into service/web, which is committed so the
+# service runs without Node. Rebuild and commit service/web after changing frontend/.
+ui:
+	cd frontend && npm ci && npm run build
+
+ui-dev:
+	cd frontend && npm run dev

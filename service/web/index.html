@@ -1,109 +1,20 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>UPI Step-Up Console</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <header class="top">
-    <div>
-      <h1>UPI step-up decision console</h1>
-      <p class="sub">Synthetic research demo. Every decision comes from the decision service API.
-        Numbers are v1 placeholders, not real UPI fraud rates.</p>
-    </div>
-    <div class="status" id="status">connecting…</div>
-  </header>
-
-  <main>
-    <section class="card" id="try">
-      <h2>Try a payment</h2>
-      <div class="presets" id="presets"></div>
-      <form id="payment-form" autocomplete="off">
-        <div class="grid">
-          <label>Amount (Rs)<input name="amount" type="number" min="1" step="any" required></label>
-          <label>User's usual payment (Rs)<input name="median" type="number" min="1" step="any" required></label>
-          <label>Network
-            <select name="network"><option>home</option><option>mobile</option><option>public</option></select>
-          </label>
-          <label>Payee risk label (FRI)
-            <select name="fri">
-              <option value="0">0 none</option><option value="1">1 medium</option>
-              <option value="2">2 high</option><option value="3">3 very high</option>
-            </select>
-          </label>
-        </div>
-        <div class="checks">
-          <label><input type="checkbox" name="new_device"> New device</label>
-          <label><input type="checkbox" name="new_payee"> New payee</label>
-          <label><input type="checkbox" name="velocity"> &gt;3 payments in 10 min</label>
-          <label><input type="checkbox" name="sim_change"> SIM change (72 h)</label>
-          <label><input type="checkbox" name="remote"> Remote-access app</label>
-          <label><input type="checkbox" name="far_location"> Far from usual location</label>
-        </div>
-        <button type="submit">Score payment</button>
-        <span class="error" id="form-error" role="alert"></span>
-      </form>
-
-      <div class="result" id="result" hidden>
-        <div class="verdict">
-          <div class="score-num"><span id="score">0</span><small>/100</small></div>
-          <div>
-            <div class="tier-pill" id="tier-pill"></div>
-            <div class="muted" id="raw-total"></div>
-          </div>
-        </div>
-        <div class="meter" id="meter" aria-label="score meter"></div>
-        <div class="two-col">
-          <div>
-            <h3>Why: per-signal breakdown</h3>
-            <table class="tbl" id="breakdown"><tbody></tbody></table>
-          </div>
-          <div>
-            <h3>What each baseline would do</h3>
-            <table class="tbl" id="compare"><tbody></tbody></table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="card" id="strict">
-      <h2>Strictness</h2>
-      <p class="muted">The slider sets the shift <code>d = -strictness</code>. Higher strictness lowers all three thresholds.</p>
-      <div class="slider-row">
-        <input type="range" id="strictness" step="1">
-        <output id="strictness-out">0</output>
-        <button type="button" class="ghost" id="reset-policy">Reset policy</button>
-      </div>
-      <div class="muted" id="policy-info"></div>
-    </section>
-
-    <section class="card" id="sim">
-      <h2>Run simulation</h2>
-      <form id="sim-form" class="grid sim-grid">
-        <label>Seed<input name="seed" type="number" value="7"></label>
-        <label>Users<input name="n_users" type="number" value="200" min="1"></label>
-        <label>Payments per user<input name="payments_per_user" type="number" value="30" min="1"></label>
-        <label>Attacks per type<input name="attacks_per_type" type="number" value="100" min="1"></label>
-        <label class="inline"><input type="checkbox" name="evasive"> Evasive attackers</label>
-        <button type="submit">Run</button>
-      </form>
-      <span class="error" id="sim-error" role="alert"></span>
-      <div id="chart" class="chart"></div>
-      <div class="muted" id="sim-info"></div>
-    </section>
-
-    <section class="card" id="log">
-      <h2>Decision log <button type="button" class="ghost small" id="refresh-log">Refresh</button></h2>
-      <div class="scroll">
-        <table class="tbl wide" id="log-table">
-          <thead><tr><th>Time (UTC)</th><th>Amount</th><th>Score</th><th>Tier</th><th>Signals</th><th>Policy</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-  <script src="app.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Adaptive step-up authentication for UPI-style payments: simulation engine and decision console." />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>Step-up simulation engine</title>
+    <script type="module" crossorigin src="/ui/assets/index-CHLAp7DQ.js"></script>
+    <link rel="modulepreload" crossorigin href="/ui/assets/rolldown-runtime-XKyaHtl9.js">
+    <link rel="modulepreload" crossorigin href="/ui/assets/charts-B5KzmQjt.js">
+    <link rel="modulepreload" crossorigin href="/ui/assets/motion-At9at2_A.js">
+    <link rel="modulepreload" crossorigin href="/ui/assets/react-Bm445KOc.js">
+    <link rel="modulepreload" crossorigin href="/ui/assets/vendor-Bb3NO6G-.js">
+    <link rel="stylesheet" crossorigin href="/ui/assets/index-COMb3cFh.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
